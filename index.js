@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
-import './index.css';
 
 const e = React.createElement;
 
