@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client';
 import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import './index.css';
@@ -110,7 +110,7 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+const root = createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
     <App />
