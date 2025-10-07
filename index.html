@@ -19,6 +19,13 @@
 </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Polyfill for process.env to avoid a ReferenceError in browser environments
+      // where the `process` object is not defined.
+      if (typeof window.process === 'undefined') {
+        window.process = { env: { API_KEY: '' } };
+      }
+    </script>
     <script type="module" src="index.js"></script>
   </body>
 </html>
