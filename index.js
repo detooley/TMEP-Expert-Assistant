@@ -46,7 +46,7 @@ const App = () => {
 
     } catch (err) {
       console.error(err);
-      setError('An error occurred while fetching the response. Please try again.');
+      setError(err.message || 'An error occurred while fetching the response. Please try again.');
     } finally {
       setLoading(false);
     }
