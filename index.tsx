@@ -9,15 +9,17 @@ import { GoogleGenAI } from '@google/genai';
 import { marked } from 'marked';
 import './index.css';
 
+const e = React.createElement;
+
 const App = () => {
   const [query, setQuery] = useState('');
   const [response, setResponse] = useState('');
-  const [sources, setSources] = useState<any[]>([]);
+  const [sources, setSources] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     if (!query.trim()) return;
 
     setLoading(true);
@@ -26,7 +28,7 @@ const App = () => {
     setSources([]);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
       const modelResponse = await ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: query,
@@ -51,68 +53,78 @@ const App = () => {
     }
   };
 
-  return (
-    <div className="app-container">
-      <header>
-        <h1>TMEP Expert Assistant</h1>
-        <p>Your guide to the Trademark Manual of Examining Procedure</p>
-      </header>
-      <main>
-        <form onSubmit={handleSubmit} aria-labelledby="form-heading">
-          <label htmlFor="query-input" id="form-heading" className="sr-only">Ask a question about the TMEP</label>
-          <input
-            id="query-input"
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="e.g., What constitutes a merely descriptive mark?"
-            disabled={loading}
-            aria-required="true"
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? 'Thinking...' : 'Ask'}
-          </button>
-        </form>
-        {error && <p className="error" role="alert">{error}</p>}
-        <div className="response-container">
-          {loading && (
-            <div className="loader" aria-label="Loading response">
-              <div className="square"></div>
-              <div className="square"></div>
-              <div className="square"></div>
-            </div>
-          )}
-          {response && (
-             <div className="response-content">
-                <h2>Response</h2>
-                <div dangerouslySetInnerHTML={{ __html: response }} />
-            </div>
-          )}
-          {sources.length > 0 && (
-            <div className="sources-content">
-                <h3>Sources</h3>
-                <ul>
-                    {sources.map((source, index) => (
-                        source.web && (
-                            <li key={index}>
-                                <a href={source.web.uri} target="_blank" rel="noopener noreferrer">
-                                    {source.web.title || source.web.uri}
-                                </a>
-                            </li>
-                        )
-                    ))}
-                </ul>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
+  return e(
+    'div',
+    { className: 'app-container' },
+    e(
+      'header',
+      null,
+      e('h1', null, 'TMEP Expert Assistant'),
+      e('p', null, 'Your guide to the Trademark Manual of Examining Procedure')
+    ),
+    e(
+      'main',
+      null,
+      e(
+        'form',
+        { onSubmit: handleSubmit, 'aria-labelledby': 'form-heading' },
+        e('label', { htmlFor: 'query-input', id: 'form-heading', className: 'sr-only' }, 'Ask a question about the TMEP'),
+        e('input', {
+          id: 'query-input',
+          type: 'text',
+          value: query,
+          onChange: (e) => setQuery(e.target.value),
+          placeholder: 'e.g., What constitutes a merely descriptive mark?',
+          disabled: loading,
+          'aria-required': 'true',
+        }),
+        e('button', { type: 'submit', disabled: loading }, loading ? 'Thinking...' : 'Ask')
+      ),
+      error && e('p', { className: 'error', role: 'alert' }, error),
+      e(
+        'div',
+        { className: 'response-container' },
+        loading &&
+          e(
+            'div',
+            { className: 'loader', 'aria-label': 'Loading response' },
+            e('div', { className: 'square' }),
+            e('div', { className: 'square' }),
+            e('div', { className: 'square' })
+          ),
+        response &&
+          e(
+            'div',
+            { className: 'response-content' },
+            e('h2', null, 'Response'),
+            e('div', { dangerouslySetInnerHTML: { __html: response } })
+          ),
+        sources.length > 0 &&
+          e(
+            'div',
+            { className: 'sources-content' },
+            e('h3', null, 'Sources'),
+            e(
+              'ul',
+              null,
+              sources.map((source, index) =>
+                source.web &&
+                e(
+                  'li',
+                  { key: index },
+                  e(
+                    'a',
+                    { href: source.web.uri, target: '_blank', rel: 'noopener noreferrer' },
+                    source.web.title || source.web.uri
+                  )
+                )
+              )
+            )
+          )
+      )
+    )
   );
 };
 
-const root = createRoot(document.getElementById('root')!);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const root = createRoot(document.getElementById('root'));
+root.render(e(React.StrictMode, null, e(App, null)));
