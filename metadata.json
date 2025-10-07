@@ -1,0 +1,5 @@
+{
+  "name": "TMEP Expert Assistant",
+  "description": "An expert assistant for the TMEP, providing answers with embedded links to the latest published version.",
+  "requestFramePermissions": []
+}
